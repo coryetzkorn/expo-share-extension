@@ -33,7 +33,7 @@ export default function ShareExtension({ url, text }: InitialProps) {
           </Text>
         )}
       </View>
-      <Button title="Open Host App" onPress={() => openHostApp("/")} />
+      <Button title="Open Host App" onPress={() => openHostApp("?v=1")} />
       <Button title="Close" onPress={close} />
     </View>
   );

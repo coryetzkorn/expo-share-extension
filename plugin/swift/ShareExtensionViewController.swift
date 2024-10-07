@@ -85,11 +85,9 @@ class ShareExtensionViewController: UIViewController {
     
     guard let url = urlComponents.url else { return }
     
-    DispatchQueue.main.async {
-        UIApplication.shared.open(url, options: [:]) { success in
-            self.close()
-      }
-    }
+    self.extensionContext?.open(url, completionHandler: { (success) in
+      self.close()
+    })
   }
   
   private func loadReactNativeContent() {
