@@ -1,4 +1,4 @@
-import { close, type InitialProps } from "expo-share-extension";
+import { close, openHostApp, type InitialProps } from "expo-share-extension";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 export default function ShareExtension({ url, text }: InitialProps) {
@@ -9,28 +9,31 @@ export default function ShareExtension({ url, text }: InitialProps) {
       >
         Basic Example
       </Text>
-      {url && (
-        <Text
-          style={{
-            textAlign: "center",
-            color: "#313639",
-            fontSize: 16,
-          }}
-        >
-          URL: {url}
-        </Text>
-      )}
-      {text && (
-        <Text
-          style={{
-            textAlign: "center",
-            color: "#313639",
-            fontSize: 16,
-          }}
-        >
-          Text: {text}
-        </Text>
-      )}
+      <View style={styles.body}>
+        {url && (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#313639",
+              fontSize: 16,
+            }}
+          >
+            URL: {url}
+          </Text>
+        )}
+        {text && (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#313639",
+              fontSize: 16,
+            }}
+          >
+            Text: {text}
+          </Text>
+        )}
+      </View>
+      <Button title="Open Host App" onPress={() => openHostApp("/")} />
       <Button title="Close" onPress={close} />
     </View>
   );
@@ -44,5 +47,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 30,
+  },
+  body: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
 });

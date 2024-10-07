@@ -64,7 +64,6 @@ class ShareExtensionViewController: UIViewController {
     var urlComponents = URLComponents()
     urlComponents.scheme = scheme
     urlComponents.host = ""
-    // TODO: handle query params
     
     let pathComponents = path.split(separator: "?", maxSplits: 1)
     let pathWithoutQuery = String(pathComponents[0])
@@ -72,28 +71,25 @@ class ShareExtensionViewController: UIViewController {
     
     // Parse and set query items
     if let queryString = queryString {
-      let queryItems = queryString.split(separator: "&").map { queryParam -> URLQueryItem in
-        let paramComponents = queryParam.split(separator: "=", maxSplits: 1)
-        let name = String(paramComponents[0])
-        let value = paramComponents.count > 1 ? String(paramComponents[1]) : nil
-        return URLQueryItem(name: name, value: value)
-      }
-      urlComponents.queryItems = queryItems
+        let queryItems = queryString.split(separator: "&").map { queryParam -> URLQueryItem in
+            let paramComponents = queryParam.split(separator: "=", maxSplits: 1)
+            let name = String(paramComponents[0])
+            let value = paramComponents.count > 1 ? String(paramComponents[1]) : nil
+            return URLQueryItem(name: name, value: value)
+        }
+        urlComponents.queryItems = queryItems
     }
     
     let pathWithSlashEnsured = pathWithoutQuery.hasPrefix("/") ? pathWithoutQuery : "/\(pathWithoutQuery)"
     urlComponents.path = pathWithSlashEnsured
+    
     guard let url = urlComponents.url else { return }
-    let selectorOpenURL = sel_registerName("openURL:")
-    var responder: UIResponder? = self
-    while responder != nil {
-      if responder?.responds(to: selectorOpenURL) == true {
-        responder?.perform(selectorOpenURL, with: url)
-        break // Exit the loop once the URL is opened
+    
+    DispatchQueue.main.async {
+        UIApplication.shared.open(url, options: [:]) { success in
+            self.close()
       }
-      responder = responder!.next
     }
-    self.close()
   }
   
   private func loadReactNativeContent() {
